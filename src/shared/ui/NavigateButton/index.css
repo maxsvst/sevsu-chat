@@ -1,0 +1,22 @@
+.navigate {
+    border: none;
+    background-color: inherit;
+    transition: all .6s;
+}
+
+.navigate:hover, .navigate:focus-visible {
+    outline: none;
+    transform: scale(1.02);
+}
+
+.navigate>span, .additional {
+    text-align: center;
+    color: #6C5FD4;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.additional {
+    color: black;
+}

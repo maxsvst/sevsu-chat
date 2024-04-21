@@ -1,0 +1,25 @@
+.confirm, .disabled {
+    width: 327px;
+    height: 50px;
+    background-image: linear-gradient(150deg, #6C5FD4, #5DD3A9);
+    border: none;
+    border-radius: 8px;
+    transition: all .6s;
+}
+
+.confirm:hover, .confirm:focus-visible {
+    outline: none;
+    transform: scale(1.02);
+}
+
+.confirm, .disabled>span {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.disabled {
+    background-image: linear-gradient(150deg, #BBBBBB, #BBBBBB);
+}
