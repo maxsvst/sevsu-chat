@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
@@ -17,9 +19,9 @@ import {
 } from "@/shared/ui";
 import { registrationValidationSchema } from "@/shared/lib";
 
-import "./style.css";
+import style from "./style.module.css";
 
-const Login = () => {
+const Registration = () => {
   const [email, setEmail] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
@@ -43,7 +45,7 @@ const Login = () => {
   const registerHandler = () => {
     api
       .post("/auth/signup", { email, username: userName, fullName, password })
-      .then((res) => console.log(res.data))
+      .then(() => router.push("/login"))
       .catch((e) => console.error(e));
   };
 
@@ -55,8 +57,8 @@ const Login = () => {
     !password;
 
   return (
-    <div className="background">
-      <div className="form">
+    <div className={style.background}>
+      <div className={style.form}>
         <Logo />
         <Article text="Регистрация" />
         <Input
@@ -68,7 +70,7 @@ const Login = () => {
           changeHandler={(e) => setUserName(e.target.value)}
           placeholder="Введите имя пользователя"
         />
-        <div className="separator" />
+        <div className={style.separator} />
         <Input
           value={email}
           Icon={EmailIcon}
@@ -110,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Registration;

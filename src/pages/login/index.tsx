@@ -16,9 +16,9 @@ import {
 } from "@/shared/ui";
 import { loginValidationSchema } from "@/shared/lib";
 
-import "./style.css";
+import style from "./style.module.css";
 
-const Index = () => {
+const Login = () => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -46,6 +46,7 @@ const Index = () => {
       .then((data) => {
         Cookies.set("jwt_access", data.backendTokens.accessToken);
         Cookies.set("jwt_refresh", data.backendTokens.refreshToken);
+        router.push("/chats");
       })
       .catch((e) => console.error(e));
   };
@@ -53,8 +54,8 @@ const Index = () => {
   const isDisabled = !!Object.keys(errors).length || !userName || !password;
 
   return (
-    <div className="background">
-      <form className="form">
+    <div className={style.background}>
+      <form className={style.form}>
         <Logo />
         <Article text="Добро пожаловать" />
         <Input
@@ -87,7 +88,7 @@ const Index = () => {
             e: React.MouseEvent<HTMLButtonElement, MouseEvent>
           ) => {
             e.preventDefault();
-            router.push("/");
+            router.push("/registration");
           }}
         />
       </form>
@@ -95,4 +96,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Login;

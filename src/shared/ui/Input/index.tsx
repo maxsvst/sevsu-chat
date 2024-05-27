@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from "react";
 
-import "./index.css";
+import style from "./index.module.css";
 
 export const Input = ({
   value,
@@ -20,10 +20,11 @@ export const Input = ({
   error: string | undefined;
 }) => {
   return (
-    <div className="errorWrapper">
-      <div className="inputWrapper">
+    <div className={style.errorWrapper}>
+      <div className={style.inputWrapper}>
         <Icon />
         <input
+          className={style.input}
           {...register(registerName)}
           placeholder={placeholder}
           value={value}
@@ -31,9 +32,9 @@ export const Input = ({
         />
       </div>
       {!!error ? (
-        <span className="error">{error}</span>
+        <span className={style.error}>{error}</span>
       ) : (
-        <span className="error-hidden">Ошибка</span>
+        <span className={style.errorHidden}>Ошибка</span>
       )}
     </div>
   );

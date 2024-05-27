@@ -1,0 +1,18 @@
+.authLogo,
+.logo {
+  font-size: 64px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  background: -webkit-linear-gradient(0deg, #6c5fd4, #5dd3a9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  user-select: none;
+  margin-bottom: 10px;
+}
+
+.logo {
+  font-size: 25px;
+  margin: 0;
+  place-self: center;
+  order: 2;
+}

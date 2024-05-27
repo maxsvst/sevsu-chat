@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./index.css";
+import style from "./index.module.css";
 
 export const NavigateButton = ({
   text,
@@ -13,8 +13,10 @@ export const NavigateButton = ({
 }) => {
   return (
     <div>
-      {additionalText && <span className="additional">{additionalText}</span>}
-      <button onClick={clickHandler} className="navigate">
+      {additionalText && (
+        <span className={style.additional}>{additionalText}</span>
+      )}
+      <button onClick={clickHandler} className={style.navigate}>
         <span>{text}</span>
       </button>
     </div>

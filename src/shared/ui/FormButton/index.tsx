@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from "react";
 
-import "./index.css";
+import style from "./index.module.css";
 
 export const FormButton = ({
   text,
@@ -13,7 +13,7 @@ export const FormButton = ({
 }) => {
   return (
     <button
-      className={isDisabled ? "disabled" : "confirm"}
+      className={isDisabled ? style.disabled : style.confirm}
       disabled={isDisabled}
       onClick={clickHandler}
     >

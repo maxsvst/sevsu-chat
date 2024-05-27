@@ -1,7 +1,7 @@
 import React from "react";
 
-import "./index.css";
+import style from "./index.module.css";
 
-export const Logo = () => {
-  return <span className="logo">ChatIS</span>;
+export const Logo = ({ isAuth = true }: { isAuth?: boolean }) => {
+  return <span className={isAuth ? style.authLogo : style.logo}>ChatIS</span>;
 };
