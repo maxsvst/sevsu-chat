@@ -14,7 +14,7 @@ export const DotsIcon = () => (
       height="34"
       rx="17"
       fill="url(#paint0_linear_96_1001)"
-      fill-opacity="0.1"
+      fillOpacity="0.1"
     />
     <circle cx="12" cy="17" r="2" fill="#6C5FD4" />
     <circle cx="17" cy="17" r="2" fill="#6C5FD4" />
@@ -28,8 +28,8 @@ export const DotsIcon = () => (
         y2="21.4273"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#6C5FD4" />
-        <stop offset="1" stop-color="#5DD3A9" />
+        <stop stopColor="#6C5FD4" />
+        <stop offset="1" stopColor="#5DD3A9" />
       </linearGradient>
     </defs>
   </svg>

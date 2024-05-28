@@ -27,17 +27,19 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       const url = error.response.config.url;
       const method: Method = error.response.config.method;
+      const errorData =
+        error.response.config.data && JSON.parse(error.response.config.data);
 
-      refreshApi
+      return refreshApi
         .post("/auth/refresh")
         .then((res) => res.data)
         .then((data) => {
           Cookies.set("jwt_access", data.accessToken);
           Cookies.set("jwt_refresh", data.refreshToken);
-          api({
-            method,
-            url,
-          });
+
+          return method === "get"
+            ? api.get(url).then((res) => res)
+            : api.post(url, errorData).then((res) => res);
         })
         .catch((e: Error) => {
           console.error(e);

@@ -1,1 +1,1 @@
-export { setMessages, default as chatReducer } from "./model/chatSlice";
+export { addMessage, default as chatReducer } from "./model/chatSlice";

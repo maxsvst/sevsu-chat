@@ -11,82 +11,74 @@ import { DotsIcon } from "@/shared/ui/DotsIcon";
 import { SendButton } from "@/shared/ui/SendButton";
 import {
   addMessage,
+  fetchChatId,
+  fetchMe,
+  fetchOnlineUsers,
   fetchUsers,
   selectChat,
 } from "@/entities/chat/model/chatSlice";
 
 import style from "./style.module.css";
-import { api } from "@/shared/api";
 import { useAppDispatch } from "@/app/store";
+import { io, Socket } from "socket.io-client";
+import { api } from "@/shared/api";
 
 const Chats = () => {
   const [message, setMessage] = useState("");
-  const chat = useSelector(selectChat);
-
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const { messages, users, onlineUsers, myId, chatId } =
+    useSelector(selectChat);
   const dispatch = useAppDispatch();
 
-  console.log(chat);
+  useEffect(() => {
+    !!message.trim().length ? setIsDisabled(false) : setIsDisabled(true);
+  }, [message]);
 
   useEffect(() => {
+    // chatId &&
+    // api.get(`/chats/messages/${chatId}`).then((res) => console.log(res));
+  }, [chatId]);
+
+  useEffect(() => {
+    dispatch(fetchOnlineUsers());
+    dispatch(fetchChatId("chat"));
     dispatch(fetchUsers());
-    const socket = new WebSocket("wss://localhost:5000");
+    dispatch(fetchMe());
 
-    socket.onopen = () => {
-      console.log("WebSocket connected");
-    };
+    api.get("/chats/my-chats").then((res) => console.log(res));
 
-    socket.onmessage = (event) => {
-      const message = event.data;
+    const socket = io("ws://localhost:5000/chat", {
+      transports: ["websocket"],
+    });
 
+    socket?.on("connect", () => {
+      // console.log("WebSocket connected");
+    });
+
+    setSocket(socket);
+
+    socket?.on("receiveMessage", (message) => {
       dispatch(addMessage(message));
-    };
+    });
 
-    socket.onclose = () => {
-      console.log("WebSocket disconnected");
-    };
+    socket.on("disconnect", () => {
+      // console.log("WebSocket disconnected");
+    });
 
     return () => {
-      socket.close();
+      socket.disconnect();
     };
   }, []);
 
-  const mockMessage = [
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "in",
-    },
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "in",
-    },
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "out",
-    },
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "out",
-    },
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "out",
-    },
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "in",
-    },
-    {
-      message:
-        "12312312AAAAAAAAAAAAAAAaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-      type: "in",
-    },
-  ];
+  const formAction = (event: any) => {
+    event.preventDefault();
+    const message = event.target.message.value;
+    setMessage("");
+    socket?.emit("sendMessage", { text: message, chatId: chatId });
+  };
+
+  const usersList = users.filter((user) => user.id !== myId.id);
 
   return (
     <div className={style.chatsWrapper}>
@@ -97,15 +89,23 @@ const Chats = () => {
           <div className={style.plug} />
         </div>
         <div className={style.chatsUserWrapper}>
-          {Array.of(1, 2, 3, 4).map((_) => (
-            <div className={style.chatsUser}>
-              <UserPhoto />
-              <div className={style.userInfoWrapper}>
-                <div className={style.userName}>Nicolas</div>
-                <div className={style.userStatus}>В сети</div>
+          {usersList.map((user) => {
+            return (
+              <div key={user.id} className={style.chatsUser}>
+                <UserPhoto />
+                <div className={style.userInfoWrapper}>
+                  <div className={style.userName}>{user.fullName}</div>
+                  <div className={style.userStatus}>
+                    {onlineUsers.find((onlineUser) => {
+                      return onlineUser.id === user.id;
+                    })
+                      ? "В сети"
+                      : "Не в сети"}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
       <section className={style.chatWrapper}>
@@ -114,7 +114,9 @@ const Chats = () => {
         <header className={style.chatHeader}>
           <div className={style.chatHeaderLeft}>
             <UserPhoto />
-            <span className={style.chatHeaderUserName}>Nicolas</span>
+            <span className={style.chatHeaderUserName}>
+              {/* {usersList[0].fullName} */}
+            </span>
           </div>
           <div className={style.chatHeaderRight}>
             <CallIcon />
@@ -123,9 +125,15 @@ const Chats = () => {
           </div>
         </header>
         <section className={style.chat}>
-          {mockMessage.map((mes) => (
+          {messages.map((mes) => (
+            <div className={style.messageWrapperIn}>
+              <span className={style.message}>{mes.text}</span>
+              <time className={style.messageTime}>12:12</time>
+            </div>
+          ))}
+          {/* {mockMessage.map((mes) => (
             <div
-              className={
+              className={s
                 mes.type === "in"
                   ? style.messageWrapperIn
                   : style.messageWrapperOut
@@ -134,16 +142,19 @@ const Chats = () => {
               <span className={style.message}>{mes.message}</span>
               <time className={style.messageTime}>12.12</time>
             </div>
-          ))}
+          ))} */}
         </section>
         <footer className={style.chatFooter}>
-          <input
-            className={style.chatFooterInput}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Сообщение..."
-          />
-          <SendButton />
+          <form onSubmit={formAction} className={style.chatInputForm}>
+            <input
+              className={style.chatFooterInput}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Сообщение..."
+              name="message"
+            />
+            <SendButton isDisabled={isDisabled} />
+          </form>
         </footer>
       </section>
     </div>

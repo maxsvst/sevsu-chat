@@ -1,6 +1,6 @@
 .chatsWrapper {
   padding: 10px;
-  height: 97vh;
+  height: calc(100vh - 20px);
   display: flex;
   gap: 10px;
   background: linear-gradient(150deg, #6c5fd433, #5dd3a933);
@@ -120,18 +120,19 @@
 .chat {
   box-sizing: border-box;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  /* justify-content: flex-end; */
   gap: 10px;
   width: 100%;
   height: calc(100% - 160px);
   padding: 5px 20px 5px 20px;
   background: #ffffff;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
-.chat::-webkit-scrollbar {
+/* .chat::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .messageWrapperIn {
   display: flex;
@@ -208,4 +209,11 @@
 
 .chatFooterInput::placeholder {
   color: #bbbbbb;
+}
+
+.chatInputForm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
 }

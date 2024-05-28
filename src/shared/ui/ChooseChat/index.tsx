@@ -16,7 +16,7 @@ export const ChooseChat = () => (
       height="27"
       rx="13.5"
       fill="url(#paint0_linear_96_1631)"
-      fill-opacity="0.27"
+      fillOpacity="0.27"
     />
     <rect x="0.5" y="0.5" width="338" height="27" rx="13.5" stroke="#E2E8FF" />
     <path
@@ -32,8 +32,8 @@ export const ChooseChat = () => (
         y2="90.3447"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#6C5FD4" />
-        <stop offset="1" stop-color="#5DD3A9" />
+        <stop stopColor="#6C5FD4" />
+        <stop offset="1" stopColor="#5DD3A9" />
       </linearGradient>
     </defs>
   </svg>
