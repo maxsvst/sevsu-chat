@@ -1,22 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "@/app/store";
+import { Chat, Message, User } from "@/entities/chat/model/types";
 import { api } from "@/shared/api";
 
 interface IChat {
   users: [];
   onlineUsers: [];
-  messages: [];
-  myId: string;
-  chatId: string;
+  authUser: User | null;
+  chats: Chat[];
+  selectedChat: Chat | null;
 }
 
 const initialState: IChat = {
   users: [],
-  messages: [],
   onlineUsers: [],
-  myId: "",
-  chatId: "",
+  authUser: null,
+  chats: [],
+  selectedChat: null,
 };
 
 export const fetchUsers = createAsyncThunk(
@@ -28,7 +29,7 @@ export const fetchUsers = createAsyncThunk(
     } catch (e) {
       return rejectWithValue("Не удалось получить данные");
     }
-  }
+  },
 );
 
 export const fetchOnlineUsers = createAsyncThunk(
@@ -40,7 +41,7 @@ export const fetchOnlineUsers = createAsyncThunk(
     } catch (e) {
       return rejectWithValue("Не удалось получить данные");
     }
-  }
+  },
 );
 
 export const fetchMe = createAsyncThunk(
@@ -52,7 +53,7 @@ export const fetchMe = createAsyncThunk(
     } catch (e) {
       return rejectWithValue("Не удалось получить данные");
     }
-  }
+  },
 );
 
 export const fetchChatId = createAsyncThunk(
@@ -64,41 +65,45 @@ export const fetchChatId = createAsyncThunk(
     } catch (e) {
       return rejectWithValue("Не удалось получить данные");
     }
-  }
+  },
 );
 
 const contractsReducer = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    addMessage: (state: IChat, action: PayloadAction<any>) => {
-      state.messages.push(action.payload);
+    addMessage: (state: IChat, action: PayloadAction<Message>) => {
+      state.selectedChat?.chatMessages.unshift(action.payload);
+    },
+    setSelectedChat: (state: IChat, action: PayloadAction<Chat>) => {
+      state.selectedChat = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchUsers.fulfilled,
-      (state: IChat, action: PayloadAction<any>) => {
-        state.users = action.payload;
-      }
-    ),
+    builder.addCase(fetchUsers.fulfilled, (state: IChat, action: PayloadAction<any>) => {
+      state.users = action.payload;
+    }),
       builder.addCase(
-        fetchMe.fulfilled,
+        fetchOnlineUsers.fulfilled,
         (state: IChat, action: PayloadAction<any>) => {
-          state.myId = action.payload;
-        }
+          state.onlineUsers = action.payload;
+        },
       ),
+      builder.addCase(fetchMe.fulfilled, (state: IChat, action: PayloadAction<any>) => {
+        state.authUser = action.payload;
+      }),
       builder.addCase(
         fetchChatId.fulfilled,
-        (state: IChat, action: PayloadAction<any>) => {
-          state.chatId = action.payload.id;
-        }
+        (state: IChat, action: PayloadAction<Chat>) => {
+          state.chats.push(action.payload);
+          state.selectedChat = action.payload;
+        },
       );
   },
 });
 
 export const selectChat = (state: RootState) => state.chat;
 
-export const { addMessage } = contractsReducer.actions;
+export const { addMessage, setSelectedChat } = contractsReducer.actions;
 
 export default contractsReducer.reducer;

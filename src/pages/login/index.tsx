@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import { api } from "@/shared/api";
+import { loginValidationSchema } from "@/shared/lib";
 import {
   Article,
   FormButton,
@@ -14,7 +15,6 @@ import {
   NavigateButton,
   PasswordIcon,
 } from "@/shared/ui";
-import { loginValidationSchema } from "@/shared/lib";
 
 import style from "./style.module.css";
 
@@ -37,9 +37,8 @@ const Login = () => {
     Cookies.get("jwt_access") && api.get("/");
   }, []);
 
-  const loginHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-
+  const loginHandler = (event: any) => {
+    event.preventDefault();
     api
       .post("/auth/login", { username: userName, password })
       .then((res) => res.data)
@@ -55,7 +54,7 @@ const Login = () => {
 
   return (
     <div className={style.background}>
-      <form className={style.form}>
+      <form className={style.form} onSubmit={loginHandler}>
         <Logo />
         <Article text="Добро пожаловать" />
         <Input
@@ -75,18 +74,13 @@ const Login = () => {
           error={errors.password?.message}
           changeHandler={(e) => setPassword(e.target.value)}
           placeholder="Введите пароль"
+          type="password"
         />
-        <FormButton
-          text="Войти"
-          clickHandler={(e) => loginHandler(e)}
-          isDisabled={isDisabled}
-        />
+        <FormButton text="Войти" isDisabled={isDisabled} />
         <NavigateButton
           additionalText="Ещё нет аккаунта?"
           text="Зарегистрироваться"
-          clickHandler={(
-            e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-          ) => {
+          clickHandler={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.preventDefault();
             router.push("/registration");
           }}

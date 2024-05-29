@@ -1,4 +1,60 @@
-body {
-  margin: 0;
-  box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Name: custom color palette
+         Author: Ilias Ism
+         URL: https://gradient.page */
+
+    /* CSS: .bg-gradient { background: var(--gradient) } */
+    --gradient: linear-gradient(to top left,#1D2B64,#F8CDDA);
+    --background: 242 97.75% 98.5%;
+    --foreground: 242 5.5% 1%;
+
+    --muted: 242 45.5% 98%;
+    --muted-foreground: 242 2.75% 42.5%;
+
+    --popover: 242 46% 92.5%;
+    --popover-foreground: 242 5.5% 1.25%;
+
+    --card: 242 30% 92.5%;
+    --card-foreground: 242 5.5% 1.25%;
+
+    --border: 242 10.5% 90%;
+    --input: 242 10.5% 90%;
+
+    --primary: 242 30% 55%;
+    --primary-transparent: 242 30% 85%;
+    --primary-foreground: 242 1.1% 92.5%;
+
+    --secondary: 242 2.75% 96.25%;
+    --secondary-foreground: 242 4.300000000000001% 12.5%;
+
+    --accent: 242 2.75% 96.25%;
+    --accent-foreground: 242 4.300000000000001% 12.5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 242 55% 25%;
+
+    --radius: 0.5rem;
+  }
+}
+
+html, body {
+  height: 100%;
+  overflow-x:hidden;
+}
+
+img {
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
 }

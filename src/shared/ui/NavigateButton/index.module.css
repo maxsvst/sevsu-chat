@@ -2,6 +2,7 @@
     border: none;
     background-color: inherit;
     transition: all .6s;
+    cursor: pointer;
 }
 
 .navigate:hover, .navigate:focus-visible {

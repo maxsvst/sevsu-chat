@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { api } from "@/shared/api";
+import { registrationValidationSchema } from "@/shared/lib";
 import {
   EmailIcon,
   FormButton,
@@ -17,7 +18,6 @@ import {
   Logo,
   Article,
 } from "@/shared/ui";
-import { registrationValidationSchema } from "@/shared/lib";
 
 import style from "./style.module.css";
 
@@ -42,7 +42,8 @@ const Registration = () => {
     Cookies.get("jwt_access") && api.get("/");
   }, []);
 
-  const registerHandler = () => {
+  const registerHandler = (e: any) => {
+    e.preventDefault();
     api
       .post("/auth/signup", { email, username: userName, fullName, password })
       .then(() => router.push("/login"))
@@ -50,15 +51,11 @@ const Registration = () => {
   };
 
   const isDisabled =
-    !!Object.keys(errors).length ||
-    !email ||
-    !fullName ||
-    !userName ||
-    !password;
+    !!Object.keys(errors).length || !email || !fullName || !userName || !password;
 
   return (
     <div className={style.background}>
-      <div className={style.form}>
+      <form className={style.form} onSubmit={registerHandler}>
         <Logo />
         <Article text="Регистрация" />
         <Input
@@ -97,17 +94,11 @@ const Registration = () => {
           error={errors.password?.message}
           changeHandler={(e) => setPassword(e.target.value)}
           placeholder="Введите пароль"
+          type="password"
         />
-        <FormButton
-          text="Создать"
-          clickHandler={registerHandler}
-          isDisabled={isDisabled}
-        />
-        <NavigateButton
-          text="Войти"
-          clickHandler={() => router.push("/login")}
-        />
-      </div>
+        <FormButton text="Создать" isDisabled={isDisabled} />
+        <NavigateButton text="Войти" clickHandler={() => router.push("/login")} />
+      </form>
     </div>
   );
 };

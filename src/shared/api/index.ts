@@ -45,5 +45,5 @@ api.interceptors.response.use(
           console.error(e);
         });
     }
-  }
+  },
 );

@@ -13,9 +13,7 @@ export const NavigateButton = ({
 }) => {
   return (
     <div>
-      {additionalText && (
-        <span className={style.additional}>{additionalText}</span>
-      )}
+      {additionalText && <span className={style.additional}>{additionalText}</span>}
       <button onClick={clickHandler} className={style.navigate}>
         <span>{text}</span>
       </button>

@@ -10,6 +10,7 @@ export const Input = ({
   register,
   registerName,
   error,
+  type,
 }: {
   value: string;
   changeHandler: ChangeEventHandler<HTMLInputElement>;
@@ -18,6 +19,7 @@ export const Input = ({
   register: any;
   registerName: string;
   error: string | undefined;
+  type?: string;
 }) => {
   return (
     <div className={style.errorWrapper}>
@@ -29,9 +31,10 @@ export const Input = ({
           placeholder={placeholder}
           value={value}
           onChange={changeHandler}
+          type={type}
         />
       </div>
-      {!!error ? (
+      {error ? (
         <span className={style.error}>{error}</span>
       ) : (
         <span className={style.errorHidden}>Ошибка</span>

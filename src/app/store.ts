@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 import { chatReducer } from "@/entities/chat/index";
-import { useDispatch } from "react-redux";
 
 const setupStore = () =>
   configureStore({
@@ -18,4 +18,4 @@ type RootState = ReturnType<typeof store.getState>;
 type AppStore = ReturnType<typeof setupStore>;
 type AppDispatch = AppStore["dispatch"];
 
-export { store, RootState, AppDispatch };
+export { store, type RootState, type AppDispatch };

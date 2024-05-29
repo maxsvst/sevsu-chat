@@ -1,21 +1,19 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 
 import style from "./index.module.css";
 
 export const FormButton = ({
   text,
   isDisabled,
-  clickHandler,
 }: {
   text: string;
   isDisabled: boolean;
-  clickHandler: MouseEventHandler<HTMLButtonElement>;
 }) => {
   return (
     <button
       className={isDisabled ? style.disabled : style.confirm}
       disabled={isDisabled}
-      onClick={clickHandler}
+      type="submit"
     >
       <span>{text}</span>
     </button>

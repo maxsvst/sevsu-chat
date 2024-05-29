@@ -68,6 +68,7 @@
 }
 
 .userStatus {
+  text-align: left;
   font-size: 12px;
   line-height: 18px;
   font-family: "Poppins", sans-serif;
@@ -120,14 +121,15 @@
 .chat {
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  position: relative;
+  flex-direction: column-reverse;
   /* justify-content: flex-end; */
   gap: 10px;
   width: 100%;
   height: calc(100% - 160px);
   padding: 5px 20px 5px 20px;
   background: #ffffff;
-  /* overflow-y: scroll; */
+   overflow-y: scroll;
 }
 
 /* .chat::-webkit-scrollbar {
