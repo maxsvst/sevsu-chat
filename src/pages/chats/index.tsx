@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { io, Socket } from "socket.io-client";
 
 import { Logo } from "@/shared/ui";
 import { UserPhoto } from "@/shared/ui/UserPhoto";
@@ -17,11 +18,10 @@ import {
   fetchUsers,
   selectChat,
 } from "@/entities/chat/model/chatSlice";
+import { api } from "@/shared/api";
+import { useAppDispatch } from "@/app/store";
 
 import style from "./style.module.css";
-import { useAppDispatch } from "@/app/store";
-import { io, Socket } from "socket.io-client";
-import { api } from "@/shared/api";
 
 const Chats = () => {
   const [message, setMessage] = useState("");
@@ -30,6 +30,13 @@ const Chats = () => {
   const { messages, users, onlineUsers, myId, chatId } =
     useSelector(selectChat);
   const dispatch = useAppDispatch();
+
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    // 👇️ Scroll to the bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     !!message.trim().length ? setIsDisabled(false) : setIsDisabled(true);
@@ -42,7 +49,7 @@ const Chats = () => {
 
   useEffect(() => {
     dispatch(fetchOnlineUsers());
-    dispatch(fetchChatId("chat"));
+    // dispatch(fetchChatId("chat"));
     dispatch(fetchUsers());
     dispatch(fetchMe());
 
@@ -97,7 +104,7 @@ const Chats = () => {
                   <div className={style.userName}>{user.fullName}</div>
                   <div className={style.userStatus}>
                     {onlineUsers.find((onlineUser) => {
-                      return onlineUser.id === user.id;
+                      return onlineUser.id !== user.id;
                     })
                       ? "В сети"
                       : "Не в сети"}
@@ -125,6 +132,7 @@ const Chats = () => {
           </div>
         </header>
         <section className={style.chat}>
+          <div style={{ flex: "1 1 auto" }} />
           {messages.map((mes) => (
             <div className={style.messageWrapperIn}>
               <span className={style.message}>{mes.text}</span>
@@ -143,6 +151,7 @@ const Chats = () => {
               <time className={style.messageTime}>12.12</time>
             </div>
           ))} */}
+          <div ref={bottomRef} />
         </section>
         <footer className={style.chatFooter}>
           <form onSubmit={formAction} className={style.chatInputForm}>
