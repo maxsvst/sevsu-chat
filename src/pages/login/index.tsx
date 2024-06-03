@@ -78,7 +78,7 @@ const Login = () => {
         />
         <FormButton text="Войти" isDisabled={isDisabled} />
         <NavigateButton
-          additionalText="Ещё нет аккаунта?"
+          additionalText="Ещё нет аккаунта? "
           text="Зарегистрироваться"
           clickHandler={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.preventDefault();

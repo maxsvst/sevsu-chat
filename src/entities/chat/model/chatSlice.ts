@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "@/app/store";
-import { Chat, Message, User } from "@/entities/chat/model/types";
+import { Chat, Message, IUser } from "@/entities/chat/model/types";
 import { api } from "@/shared/api";
 
 interface IChat {
   users: [];
   onlineUsers: [];
-  authUser: User | null;
+  authUser: IUser | null;
   chats: Chat[];
   selectedChat: Chat | null;
+  currentTab: string;
 }
 
 const initialState: IChat = {
@@ -18,6 +19,7 @@ const initialState: IChat = {
   authUser: null,
   chats: [],
   selectedChat: null,
+  currentTab: "chat",
 };
 
 export const fetchUsers = createAsyncThunk(
@@ -78,20 +80,29 @@ const contractsReducer = createSlice({
     setSelectedChat: (state: IChat, action: PayloadAction<Chat>) => {
       state.selectedChat = action.payload;
     },
+    setCurrentTab: (state: IChat, action: PayloadAction<string>) => {
+      state.currentTab = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.fulfilled, (state: IChat, action: PayloadAction<any>) => {
-      state.users = action.payload;
-    }),
+    builder.addCase(
+      fetchUsers.fulfilled,
+      (state: IChat, action: PayloadAction<any>) => {
+        state.users = action.payload;
+      },
+    ),
       builder.addCase(
         fetchOnlineUsers.fulfilled,
         (state: IChat, action: PayloadAction<any>) => {
           state.onlineUsers = action.payload;
         },
       ),
-      builder.addCase(fetchMe.fulfilled, (state: IChat, action: PayloadAction<any>) => {
-        state.authUser = action.payload;
-      }),
+      builder.addCase(
+        fetchMe.fulfilled,
+        (state: IChat, action: PayloadAction<any>) => {
+          state.authUser = action.payload;
+        },
+      ),
       builder.addCase(
         fetchChatId.fulfilled,
         (state: IChat, action: PayloadAction<Chat>) => {
@@ -104,6 +115,7 @@ const contractsReducer = createSlice({
 
 export const selectChat = (state: RootState) => state.chat;
 
-export const { addMessage, setSelectedChat } = contractsReducer.actions;
+export const { addMessage, setSelectedChat, setCurrentTab } =
+  contractsReducer.actions;
 
 export default contractsReducer.reducer;

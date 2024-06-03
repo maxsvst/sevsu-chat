@@ -1,17 +1,20 @@
-export type User = {
+export interface IUser {
   id: string;
   fullName: string;
-};
+  email: string;
+}
 
 export type Message = {
   id: string;
   text: string;
   createdAt: string;
-  user: User;
+  user: IUser;
 };
 
 export type Chat = {
   id: string;
-  chatMembers: User[];
+  memberName: string;
+  memberEmail: string;
+  chatMembers: IUser[];
   chatMessages: Message[];
 };
